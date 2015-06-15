@@ -15,7 +15,7 @@
         "associate_public_ip_address": true,
         "instance_type": "t2.micro",
         "region": "{{ user `region` }}",
-        "source_ami": "{{ user `source_ami`}}",
+        "source_ami": "{{ user `source_ami` }}",
         "ssh_port": 22,
         "ssh_username": "{{ user `ssh_username` }}",
         "ssh_timeout": "5m",
@@ -26,6 +26,15 @@
         }
     }],	
     "provisioners": [
+        {
+            "type": "shell",
+            "scripts": ["ansible/scripts/install-ansible.sh"]
+        },
+        {
+            "playbook_dir"  : "ansible",
+            "playbook_file" : "ansible/playbook.yml",
+            "type"          : "ansible-local"
+        }
     ],
     "post-processors": [
     ]

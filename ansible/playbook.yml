@@ -1,0 +1,12 @@
+---
+- hosts: localhost
+  gather_facts: yes
+  tasks:
+      - name: Install desired packages
+        apt: "name={{ item }} state=present update_cache=true cache_valid_time=600"
+        with_items:
+            - aptitude
+            - iftop
+            - tree
+            - wget
+
