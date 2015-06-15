@@ -22,7 +22,9 @@
         "tags": {
             "OS": "Ubuntu",
             "Version": "14.04",
-            "State": "in-development"
+            "State": "in-development",
+            "Container Support": "Docker",
+            "Monitoring Support": "New Relic"
         }
     }],	
     "provisioners": [
