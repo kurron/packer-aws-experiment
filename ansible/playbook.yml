@@ -6,8 +6,20 @@
       - name: Install desired packages
         apt: "name={{ item }} state=present update_cache=true cache_valid_time=600"
         with_items:
-            - aptitude
             - iftop
             - tree
             - wget
-
+      - name: Install Docker keys
+        apt_key: state=present keyserver=keyserver.ubuntu.com id=36A1D7869245C8950F966E92D8576A8BA88D21E9
+      - name: Install Docker repository
+        apt_repository: repo='deb https://get.docker.io/ubuntu docker main' state=present
+      - name: Install Docker
+        apt: name=lxc-docker state=latest update_cache=true cache_valid_time=600
+      - name: Add ubuntu to the docker group
+        user: name=ubuntu state=present groups=docker
+      - name: Expose the daemon over insecure HTTP
+        lineinfile: dest=/etc/default/docker line='DOCKER_OPTS="-H tcp://0.0.0.0:2375 -H unix:///var/run/docker.sock'
+      - name: Set Memory and Swap Accounting
+        lineinfile: dest=/etc/default/grub regexp='^GRUB_CMDLINE_LINUX=""' line='GRUB_CMDLINE_LINUX="cgroup_enable=memory swapaccount=1"'
+      - name: Rebuild GRUB
+        command: update-grub
